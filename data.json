@@ -1,0 +1,22 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "name": "Avatar 2: The Way of Water",
+      "price": 2100,
+      "date": "2025-12-13"
+    },
+    {
+      "id": 2,
+      "name": "Concert: The Weeknd",
+      "price": 88000,
+      "date": "2025-12-20"
+    },
+    {
+      "id": 3,
+      "name": "Concert: Ne Prosto Orkestr",
+      "price": 17000,
+      "date": "2025-12-28"
+    }
+  ]
+}
