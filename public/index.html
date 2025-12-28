@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Uni Dashboard</title>
+    <style>
+        /* --- Сброс стилей --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f3f4f6; /* Светло-серый фон */
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            flex-wrap: wrap; /* Чтобы переносилось на мобилках */
+        }
+
+        /* --- Карточка --- */
+        .card {
+            flex: 1;
+            min-width: 320px;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Легкая тень */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Верхняя часть: Страна и Координаты */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+
+        .country-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .flag-img {
+            height: 20px;
+            border-radius: 2px;
+        }
+
+        .coords {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            text-align: right;
+        }
+
+        /* Центр: Температура */
+        .main-info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .temp {
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -2px;
+            color: #111827;
+        }
+
+        .desc {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-top: 10px;
+            text-transform: capitalize;
+        }
+
+        /* Низ: Детали (3 колонки) */
+        .details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .detail-box {
+            text-align: center;
+            flex: 1;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Сообщение */
+        .message-box {
+            background-color: #f9fafb;
+            border-left: 4px solid #3b82f6; /* Синяя полоска слева */
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        /* Плейсхолдер для второго задания */
+        .placeholder {
+            flex: 1;
+            min-width: 300px;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* Стили для поиска */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.search-box button {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.search-box button:hover { background-color: #2563eb; }
+
+/* Стили для списка учителей */
+.list-container {
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.list-item {
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: 1px solid transparent;
+}
+
+.list-item:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+}
+
+.item-name { font-weight: 600; }
+.item-dept { font-size: 0.8rem; color: #6b7280; }
+
+/* Кнопка назад */
+.back-btn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+.back-btn:hover { color: #111827; }
+
+/* Стиль для почты как на картинке */
+.email-badge {
+    display: inline-flex;       /* Чтобы иконка и текст были в ряд */
+    align-items: center;        /* Центрируем по вертикали */
+    gap: 8px;                   /* Отступ между иконкой и текстом */
+    
+    background-color: #f0fdf4;  /* Очень светло-зеленый фон */
+    border: 1px solid #4ade80;  /* Зеленая рамка */
+    color: #15803d;             /* Темно-зеленый жирный текст */
+    
+    padding: 8px 16px;
+    border-radius: 4px;         /* Скругление углов */
+    font-weight: 700;           /* Жирный шрифт */
+    font-size: 1rem;
+    margin-top: 15px;           /* Отступ сверху от имени */
+    text-decoration: none;      /* Убираем подчеркивание, если это ссылка */
+}
+
+/* Цвет самой иконки (SVG) */
+.email-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;       /* Берет цвет от текста (зеленый) */
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="card">
+            
+            <div class="header">
+                <div class="country-badge">
+                    <span id="country-code">--</span>
+                    <img id="flag" class="flag-img" src="" alt="" style="display: none;">
+                </div>
+                <div class="coords">
+                    <div id="lat">Lat: --</div>
+                    <div id="lon">Lon: --</div>
+                </div>
+            </div>
+
+            <div class="main-info">
+                <div class="temp" id="temp">--°</div>
+                <div class="desc" id="desc">Loading...</div>
+            </div>
+
+            <div class="details-row">
+                <div class="detail-box">
+                    <div class="label">Feels Like</div>
+                    <div class="value" id="feels-like">--°</div>
+                </div>
+                <div class="detail-box">
+                    <div class="label">Wind</div>
+                    <div class="value" id="wind">-- m/s</div>
+                </div>
+                <div class="detail-box">
+                    <div class="label">Rain (3h)</div>
+                    <div class="value" id="rain">--</div>
+                </div>
+            </div>
+
+            <div id="message-box" class="message-box">
+                Wait a sec...
+            </div>
+
+        </div>
+
+        <div class="card" id="uni-block">
+    <div class="header">
+        <div class="country-badge">University Search</div>
+    </div>
+
+    <!-- 1. Экран Поиска -->
+    <div id="search-view">
+        <div class="search-box">
+            <input type="text" id="teacher-input" placeholder="Teacher's name (e.g. Samat)">
+            <button onclick="searchTeachers()">Find</button>
+        </div>
+        <div id="teachers-list" class="list-container">
+        </div>
+    </div>
+
+    <div id="details-view" style="display: none;">
+    <button onclick="goBack()" class="back-btn">← Back</button>
+    
+    <div class="main-info">
+        <!-- Имя учителя -->
+        <div class="temp" style="font-size: 2.2rem; line-height: 1.2;" id="t-name">--</div>
+        
+        <!-- Почта с дизайном -->
+        <!-- Ссылка mailto, чтобы при клике открывалась почта -->
+        <a id="email-link" href="#" class="email-badge">
+            <!-- SVG Иконка конверта -->
+            <svg class="email-icon" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span id="t-email">--</span>
+        </a>
+    </div>
+
+</div>
+
+    </div>
+
+    <script>
+    async function updateWeather() {
+        try {
+            const response = await fetch('/weather');
+            const data = await response.json();
+
+            document.getElementById('temp').innerText = Math.round(data.temperature) + '°';
+            document.getElementById('desc').innerText = data.description;
+            document.getElementById('lat').innerText = `Lat: ${data.coordinates.lat}`;
+            document.getElementById('lon').innerText = `Lon: ${data.coordinates.lon}`;
+            document.getElementById('feels-like').innerText = Math.round(data.feels_like) + '°';
+            document.getElementById('wind').innerText = data.wind_speed + ' m/s';
+            document.getElementById('rain').innerText = (data.rain_volume || 0) + ' mm';
+            document.getElementById('country-code').innerText = data.country_code;
+
+            const code = data.country_code.toLowerCase();
+            const flagImg = document.getElementById('flag');
+            flagImg.src = `https://flagcdn.com/40x30/${code}.png`;
+            flagImg.style.display = 'inline-block';
+
+            const feelsLike = data.feels_like;
+            const msgBox = document.getElementById('message-box');
+            let message = "";
+            let borderColor = "#3b82f6"; 
+
+            if (feelsLike < -20) {
+                message = "🥶 Freezing! Do you really have to go? (Yes, you do).";
+                borderColor = "#3b82f6"; 
+            } else if (feelsLike >= -20 && feelsLike < 0) {
+                message = "❄️ Put on a hat. Seriously.";
+                borderColor = "#8b5cf6"; 
+            } else if (feelsLike >= 0 && feelsLike < 15) {
+                message = "☁️ Just a regular grey day. Coffee required.";
+                borderColor = "#f59e0b"; 
+            } else if (feelsLike >= 15 && feelsLike < 25) {
+                message = "😎 Weather is perfect. Too bad you're studying.";
+                borderColor = "#10b981"; 
+            } else {
+                message = "🔥 It's getting hot in here!";
+                borderColor = "#ef4444"; 
+            }
+            msgBox.innerText = message;
+            msgBox.style.borderLeftColor = borderColor;
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    async function searchTeachers() {
+        const input = document.getElementById('teacher-input').value;
+        if(!input) return;
+
+        const listContainer = document.getElementById('teachers-list');
+        listContainer.innerHTML = '<div style="text-align:center">Searching...</div>';
+
+        try {
+            const response = await fetch(`/search-teacher?name=${input}`);
+            const data = await response.json();
+
+            listContainer.innerHTML = ''; 
+
+            if (!data.list || data.list.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center">No teachers found.</div>';
+                return;
+            }
+
+            data.list.forEach(teacher => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                
+                const deptName = teacher.department ? teacher.department.titleEn : "No Department";
+                
+                div.innerHTML = `
+                    <div class="item-name">${teacher.nameKz} ${teacher.surnameKz}</div>
+                    <div class="item-dept">${deptName}</div>
+                `;
+                
+                div.onclick = () => loadTeacherDetails(teacher.userId);
+                
+                listContainer.appendChild(div);
+            });
+
+        } catch (error) {
+            console.error(error);
+            listContainer.innerHTML = 'Error searching.';
+        }
+    }
+
+    async function loadTeacherDetails(userId) {
+    try {
+        document.getElementById('search-view').style.display = 'none';
+        document.getElementById('details-view').style.display = 'block';
+        
+    
+
+        const response = await fetch(`/get-teacher-info?id=${userId}`);
+        const user = await response.json();
+
+        document.getElementById('t-name').innerText = `${user.name} ${user.surname}`;
+        document.getElementById('t-email').innerText = user.username;
+        
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById('t-name').innerText = "Error loading details";
+    }
+}
+
+    function goBack() {
+        document.getElementById('details-view').style.display = 'none';
+        document.getElementById('search-view').style.display = 'block';
+    }
+
+    updateWeather();
+</script>
+</body>
+</html>
