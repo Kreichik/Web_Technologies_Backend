@@ -1,0 +1,375 @@
+{
+  "info": {
+    "_postman_id": "41f49f05-a389-4ac2-b409-ce022173f488",
+    "name": "Assignment 4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44368052",
+    "_collection_link": "https://go.postman.co/collection/44368052-41f49f05-a389-4ac2-b409-ce022173f488?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"user@mail.ru\",\r\n    \"password\": \"password123\",\r\n    \"role\": \"user\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login admin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"test@mail.com\",\r\n    \"password\": \"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"test@mail.com\",\r\n    \"password\": \"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createEvent",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTc5Yzk0YmI1ODhkZTRlZTllZWVkYjAiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk1ODkxOTMsImV4cCI6MTc2OTU5Mjc5M30.LUvZoCyO12jEa72xAEJ0W1YCcqhbUgJuWPh2dghBVIE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Romeo and Juliet\",\r\n    \"date\": \"2026-01-28\",\r\n    \"location\": \"Shakespeare Theatre\",\r\n    \"description\": \"A tragic love story set in Verona.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createTicket",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTc5Yzk0YmI1ODhkZTRlZTllZWVkYjAiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk1ODkxOTMsImV4cCI6MTc2OTU5Mjc5M30.LUvZoCyO12jEa72xAEJ0W1YCcqhbUgJuWPh2dghBVIE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"eventId\": \"6979d5b0b588de4ee9eeedb3\",\r\n  \"price\": 12000,\r\n  \"seatNumber\": \"A-15\",\r\n  \"isVip\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tickets/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tickets",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deleteTicket admin",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTc5Yzk0YmI1ODhkZTRlZTllZWVkYjAiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk1ODkxOTMsImV4cCI6MTc2OTU5Mjc5M30.LUvZoCyO12jEa72xAEJ0W1YCcqhbUgJuWPh2dghBVIE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"eventId\": \"6979d5b0b588de4ee9eeedb3\",\r\n  \"price\": 12000,\r\n  \"seatNumber\": \"A-15\",\r\n  \"isVip\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tickets/696a4d4e66be038796f5249f",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tickets",
+            "696a4d4e66be038796f5249f"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deleteTicket user",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTc5Yzk0YmI1ODhkZTRlZTllZWVkYjAiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk1ODkxOTMsImV4cCI6MTc2OTU5Mjc5M30.LUvZoCyO12jEa72xAEJ0W1YCcqhbUgJuWPh2dghBVIE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"eventId\": \"6979d5b0b588de4ee9eeedb3\",\r\n  \"price\": 12000,\r\n  \"seatNumber\": \"A-15\",\r\n  \"isVip\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tickets/696a4d4e66be038796f5249f",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tickets",
+            "696a4d4e66be038796f5249f"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deleteEvent",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTc5Yzk0YmI1ODhkZTRlZTllZWVkYjAiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk1ODkxOTMsImV4cCI6MTc2OTU5Mjc5M30.LUvZoCyO12jEa72xAEJ0W1YCcqhbUgJuWPh2dghBVIE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"eventId\": \"6979d5b0b588de4ee9eeedb3\",\r\n  \"price\": 12000,\r\n  \"seatNumber\": \"A-15\",\r\n  \"isVip\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/696a4d4e66be038796f5249f",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "696a4d4e66be038796f5249f"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Events",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            ""
+          ],
+          "query": [
+            {
+              "key": "price",
+              "value": "40000",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "date",
+              "value": "2025-12-30",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Tickets",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            ""
+          ],
+          "query": [
+            {
+              "key": "price",
+              "value": "40000",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "date",
+              "value": "2025-12-30",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
