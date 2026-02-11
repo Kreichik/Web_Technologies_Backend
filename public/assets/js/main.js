@@ -223,7 +223,8 @@ $(document).ready(function() {
 
                 if (user.avatarUrl) {
                     $('#profile-image').attr('src', user.avatarUrl);
-                    $('#header-avatar').attr('src', user.avatarUrl);
+                    // $('#header-avatar').attr('src', user.avatarUrl);
+                    $('.user-avatar img').attr('src', user.avatarUrl);
                 }
             });
 
