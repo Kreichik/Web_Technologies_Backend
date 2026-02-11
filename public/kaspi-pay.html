@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kaspi.kz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #000; overflow: hidden; }
+        
+        #scanner-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; flex-direction: column; }
+        .scanner-header { padding: 40px 20px 20px; text-align: center; color: white; background: rgba(0,0,0,0.5); position: absolute; top: 0; width: 100%; z-index: 20; }
+        .scanner-header h2 { font-size: 20px; margin: 0 0 10px; font-weight: 600; }
+        .scanner-header p { margin: 0; font-size: 16px; opacity: 0.9; }
+        #reader { width: 100%; height: 100%; object-fit: cover; }
+        .scanner-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; height: 280px; pointer-events: none; z-index: 15; }
+        .corner { position: absolute; width: 40px; height: 40px; border: 4px solid #f14635; }
+        .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; border-radius: 12px 0 0 0; }
+        .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; border-radius: 0 12px 0 0; }
+        .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 12px; }
+        .br { bottom: 0; right: 0; border-left: 0; border-top: 0; border-radius: 0 0 12px 0; }
+
+        #payment-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #F2F2F2; z-index: 30; overflow-y: auto; }
+        .pay-header { background: white; padding: 20px; border-radius: 0 0 20px 20px; margin-bottom: 10px; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; color: #333; cursor: pointer; }
+        .merchant-row { display: flex; justify-content: space-between; margin-bottom: 15px; margin-top: 20px;}
+        .merchant-label { font-size: 16px; color: #888; }
+        .merchant-name { font-size: 16px; color: #000; font-weight: 400; text-align: right; }
+        .sum-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sum-label { font-size: 16px; color: #333; }
+        .sum-value { font-size: 18px; font-weight: 700; color: #000; }
+        
+        .bonus-row { display: flex; justify-content: space-between; align-items: center; }
+        .bonus-text { color: #888; font-size: 14px; }
+        .bonus-title { color: #78B93F; font-size: 16px; font-weight: 500; display: block; margin-bottom: 2px;}
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #E9E9E9; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input:checked + .slider { background-color: #78B93F; }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .to-pay-row { display: flex; justify-content: space-between; padding: 20px; background: white; font-weight: 700; font-size: 18px; margin-bottom: 15px; }
+        
+        .methods-container { background: white; padding: 20px; }
+        .methods-title { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; font-size: 16px; }
+        #toggle-amounts { color: #0089D0; font-weight: 400; cursor: pointer; border: none; background: none; padding: 0; }
+        .method-item { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .method-icon { width: 44px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 15px; overflow: hidden; }
+        .method-info { flex-grow: 1; }
+        .method-name { display: block; font-size: 16px; color: #333; }
+        .method-balance { display: block; font-size: 16px; color: #000; text-align: right; font-weight: 500; }
+        .radio-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #E0E0E0; margin-right: 15px; display: flex; align-items: center; justify-content: center; }
+        .radio-check.active { border-color: #f14635; background: #f14635; }
+        .radio-check.active:after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: white; }
+
+        .pay-btn-container { padding: 20px; position: fixed; bottom: 0; width: 100%; background: #F2F2F2; }
+        .btn-pay { width: 100%; background-color: #0089D0; color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; }
+
+        #success-screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 40; flex-direction: column; align-items: center; justify-content: center; }
+        .success-icon { width: 100px; height: 100px; border-radius: 50%; background: #78B93F; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+        .success-check { color: white; font-size: 60px; font-weight: bold; }
+        .success-text { font-size: 24px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+
+    <div id="scanner-screen">
+        <div class="scanner-header">
+            <h2>Kaspi QR</h2>
+            <p>Сканируйте QR-код</p>
+        </div>
+        <div id="reader"></div>
+        <div class="scanner-overlay">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+        </div>
+    </div>
+
+    <div id="payment-screen">
+        <div class="pay-header">
+            <div class="close-btn" onclick="location.reload()">✕</div>
+            <div class="merchant-row">
+                <span class="merchant-label">Заведение</span>
+                <span class="merchant-name">TickTick Cinema</span>
+            </div>
+            <div class="sum-row">
+                <span class="sum-label">Сумма</span>
+                <span class="sum-value" id="ui-amount">0 ₸</span>
+            </div>
+            <div class="bonus-row">
+                <div>
+                    <span class="bonus-title">Потратить бонусы</span>
+                    <span class="bonus-text">Накоплено 3 257 ₸</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="bonus-switch">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="to-pay-row">
+            <span>К оплате</span>
+            <span id="ui-total">0 ₸</span>
+        </div>
+
+        <div class="methods-container">
+            <div class="methods-title">
+                <span>Способ оплаты</span>
+                <button id="toggle-amounts">Скрыть сумму</button>
+            </div>
+
+            <div class="method-item" onclick="selectMethod(this)">
+                <div class="radio-check active"></div>
+                <div class="method-icon"><img src="https://kaspi.kz/img/Gold.svg" style="width: 100%;"></div>
+                <div class="method-info">
+                    <span class="method-name">Kaspi Gold</span>
+                </div>
+                <span class="method-balance" data-value="300000">300 000 ₸</span>
+            </div>
+
+            <div class="method-item" onclick="selectMethod(this)">
+                <div class="radio-check"></div>
+                <div class="method-icon"><img src="https://kaspi.kz/img/Red.svg" style="width: 100%;"></div>
+                <div class="method-info">
+                    <span class="method-name">Kaspi Red+</span>
+                </div>
+                <span class="method-balance" data-value="150000">150 000 ₸</span>
+            </div>
+        </div>
+
+        <div class="pay-btn-container">
+            <button class="btn-pay" id="btn-pay-action">Оплатить <span id="btn-amount">0 ₸</span></button>
+        </div>
+    </div>
+
+    <div id="success-screen">
+        <div class="success-icon">
+            <span class="success-check">✓</span>
+        </div>
+        <div class="success-text">Оплачено!</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        let html5QrcodeScanner;
+        let paymentData = null;
+        let amountsHidden = false;
+        const BONUS_AMOUNT = 3257;
+        const API_BASE_URL = '';
+
+        function onScanSuccess(decodedText) {
+            try {
+                paymentData = JSON.parse(decodedText);
+                if(paymentData.id && paymentData.amount) {
+                    html5QrcodeScanner.stop().then(() => {
+                        showPaymentScreen(paymentData);
+                    });
+                }
+            } catch (e) { console.log("Invalid QR"); }
+        }
+
+        function showPaymentScreen(data) {
+            $('#scanner-screen').hide();
+            $('#payment-screen').show();
+            updateTotalDisplay();
+        }
+
+        function updateTotalDisplay() {
+            if(!paymentData) return;
+            let currentAmount = paymentData.amount;
+            if($('#bonus-switch').is(':checked')) {
+                currentAmount = Math.max(0, currentAmount - BONUS_AMOUNT);
+            }
+            const formatted = currentAmount.toLocaleString() + ' ₸';
+            $('#ui-amount').text(paymentData.amount.toLocaleString() + ' ₸');
+            $('#ui-total').text(formatted);
+            $('#btn-amount').text(formatted);
+        }
+
+        $('#bonus-switch').change(updateTotalDisplay);
+
+        $('#toggle-amounts').click(function() {
+            amountsHidden = !amountsHidden;
+            $(this).text(amountsHidden ? 'Показать сумму' : 'Скрыть сумму');
+            
+            $('.method-balance').each(function() {
+                const originalStr = $(this).attr('data-value').replace(/\s/g, '');
+                if(amountsHidden) {
+                    $(this).text('*** ₸');
+                } else {
+                    $(this).text(Number(originalStr).toLocaleString() + ' ₸');
+                }
+            });
+        });
+
+        function selectMethod(el) {
+            $('.radio-check').removeClass('active');
+            $(el).find('.radio-check').addClass('active');
+        }
+
+        $('#btn-pay-action').click(function() {
+            if(!paymentData) return;
+            $(this).prop('disabled', true).text('Обработка...');
+            $.ajax({
+                url: `${API_BASE_URL}/payments/${paymentData.id}/confirm`,
+                method: 'POST',
+                success: function() {
+                    $('#payment-screen').hide();
+                    $('#success-screen').css('display', 'flex');
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
+        });
+    </script>
+</body>
+</html>

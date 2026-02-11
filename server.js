@@ -5,6 +5,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
+const userRoutes = require('./routes/userRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 app.use(express.json());
@@ -23,6 +25,8 @@ const connectDB = async () => {
 app.use('/auth', authRoutes);
 app.use('/events', eventRoutes);
 app.use('/tickets', ticketRoutes);
+app.use('/users', userRoutes);
+app.use('/payments', paymentRoutes);
 
 const startServer = async () => {
     await connectDB();

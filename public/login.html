@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickTick - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="login-page">
+
+    <main class="login-main-content">
+        <div class="login-logo-wrapper">
+            <img src="assets/images/logo.svg" alt="TickTick Logo" class="login-logo">
+        </div>
+        
+        <div class="login-form-container">
+            <h2 class="login-title">Login</h2>
+            <form id="login-form" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Email</label>
+                    <input type="text" class="form-control login-input" id="username" placeholder="Input email" required>
+                    <div class="invalid-feedback">
+                        Please enter your email.
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control login-input" id="password" placeholder="Input password" required>
+                     <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+                <div id="login-error" class="alert alert-danger d-none" role="alert"></div>
+                <button type="submit" class="btn btn-login w-100">Login</button>
+                
+                <!-- Добавлена ссылка на регистрацию -->
+                <p class="text-center mt-3 text-white">
+                    Don't have an account? <a href="register.html" class="text-white" style="text-decoration: underline;">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
+                    <a href="home.html">
+                        <img src="assets/images/logo.svg" alt="TickTick Logo" class="footer-logo">
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 text-center my-3 my-md-0">
+                    <p class="copyright-text mb-0">© 2025 My Website | All Rights Reserved</p>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
+                    <div class="social-links">
+                        <a href="#" target="_blank"><img src="assets/images/Instagram.svg" alt="Instagram" class="social-icon"></a>
+                        <a href="#" target="_blank"><img src="assets/images/Facebook.svg" alt="Facebook" class="social-icon"></a>
+                        <a href="#" target="_blank"><img src="assets/images/Twitter.svg" alt="Twitter" class="social-icon"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>

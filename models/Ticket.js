@@ -5,7 +5,8 @@ const ticketSchema = new mongoose.Schema({
     userId: { type: String, required: true },
     price: { type: Number, required: true },
     seatNumber: { type: String, required: true },
-    isVip: { type: Boolean, default: false }
+    isVip: { type: Boolean, default: false },
+    checked: { type: Boolean, default: false }
 }, { timestamps: true });
 
 ticketSchema.index({ eventId: 1, seatNumber: 1 }, { unique: true });

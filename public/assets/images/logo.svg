@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="b" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" width="130.87mm" height="47.03mm" viewBox="0 0 370.97 133.32">
+  <defs>
+    <style>
+      .d {
+        fill: #dedede;
+      }
+
+      .d, .e {
+        font-family: Ebrima-Bold, Ebrima;
+        font-size: 97.48px;
+        font-weight: 700;
+      }
+
+      .e {
+        fill: #a21a16;
+      }
+    </style>
+  </defs>
+  <g id="c" data-name="Слой 1">
+    <text class="e" transform="translate(184.18 102.19)"><tspan x="0" y="0">Tick</tspan></text>
+    <text class="d" transform="translate(0 82.87)"><tspan x="0" y="0">Tick</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickTick - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        .nav-tabs .nav-link { color: var(--text-muted); }
+        .nav-tabs .nav-link.active { background-color: var(--color-primary); color: white; border: none; }
+        .table { color: var(--text-light); }
+        .table-dark { background-color: var(--bg-dark-secondary); }
+        #qr-reader { width: 100%; }
+    </style>
+</head>
+<body class="admin-page">
+
+    <header class="site-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="header-left">
+                    <h3 class="text-white m-0">Admin Panel</h3>
+                </div>
+                <div class="header-right">
+                    <a href="home.html" class="btn btn-outline-light me-2">Back to Home</a>
+                    <button id="admin-logout" class="btn btn-danger">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white">Dashboard</h2>
+            <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#scannerModal">
+                <img src="assets/images/logo.svg" style="height: 24px; filter: brightness(0) invert(1);" class="me-2">
+                Check Ticket (Scan QR)
+            </button>
+        </div>
+
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="events-tab" data-bs-toggle="tab" data-bs-target="#events" type="button">Events</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button">Users</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets" type="button">Tickets</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="adminTabsContent">
+            
+            <div class="tab-pane fade show active" id="events" role="tabpanel">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#eventModal" onclick="clearEventForm()">+ Add Event</button>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="users" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tickets" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>User ID</th>
+                                <th>Seat</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tickets-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="scannerModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan Ticket QR</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="qr-reader"></div>
+                    <div id="scan-result" class="mt-3 d-none">
+                        <div class="alert alert-secondary">
+                            <h5>Ticket Found</h5>
+                            <p><strong>Event:</strong> <span id="scan-event"></span></p>
+                            <p><strong>Seat:</strong> <span id="scan-seat"></span></p>
+                            <p><strong>User:</strong> <span id="scan-user"></span></p>
+                            <p><strong>Status:</strong> <span id="scan-status"></span></p>
+                            <button id="btn-check-in" class="btn btn-success w-100 mt-2">Check In (Mark as Used)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="event-form">
+                        <input type="hidden" id="event-id">
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control admin-input" id="event-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control admin-input" id="event-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control admin-input" id="event-location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control admin-input" id="event-desc" style="height: 100px;"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price (₸)</label>
+                            <input type="number" class="form-control admin-input" id="event-price" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image URL</label>
+                            <input type="text" class="form-control admin-input" id="event-image" placeholder="assets/images/poster.jpeg">
+                        </div>
+                        <button type="submit" class="btn btn-create w-100">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>
