@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickTick - Buy Ticket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="admin-page">
+
+    <header class="site-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="header-left">
+                    <a href="#" class="special-offer-btn" data-bs-toggle="modal" data-bs-target="#offer-modal">Special offer</a>
+                </div>
+                <div class="header-center">
+                    <a href="home.html" class="header-logo">
+                        <img src="assets/images/logo.svg" alt="TickTick Logo">
+                    </a>
+                </div>
+                <div class="header-right">
+                    <div class="header-nav">
+                        <a href="#" class="location-selector" data-bs-toggle="modal" data-bs-target="#city-modal">
+                            <img src="assets/images/location.svg" alt="Location Icon">
+                            <span>Astana</span>
+                        </a>
+                        <a href="#" class="user-avatar">
+                            <img src="assets/images/avatar.png" alt="User Avatar">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main-content">
+        <div class="admin-form-container">
+            
+            <!-- Секция формы покупки -->
+            <div id="purchase-form-section">
+                <h2 class="admin-title">Buy Ticket for <span id="ticket-event-title">Event</span></h2>
+                <p class="text-white text-center mb-4" style="font-size: 1.2rem;">Price: $<span id="ticket-price-display">0</span></p>
+                
+                <form id="buy-ticket-form">
+                    <div class="mb-3">
+                        <label for="seat-number" class="form-label">Select Seat</label>
+                        <input type="text" class="form-control admin-input" id="seat-number" placeholder="e.g. A1, B5" required>
+                    </div>
+                    
+                    <!-- Скрытое поле для цены -->
+                    <input type="hidden" id="event-price-hidden">
+                    
+                    <div id="buy-error" class="alert alert-danger d-none" role="alert"></div>
+                    <button type="submit" class="btn btn-create w-100">Confirm Purchase</button>
+                </form>
+            </div>
+            
+            <!-- Секция подтверждения (появляется после покупки) -->
+            <div id="ticket-confirmation-section" class="d-none">
+                <h2 class="admin-title">Ticket Purchased!</h2>
+                <div class="ticket-confirmation-card">
+                    <h3>Event: <span id="confirm-event-title"></span></h3>
+                    <p>Seat: <span id="confirm-seat"></span></p>
+                    <hr style="border-color: #585858;">
+                    <p class="text-success">Success! This ticket is linked to your account.</p>
+                </div>
+                <a href="home.html" class="btn btn-create w-100 mt-3">Back to Home</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
+                    <a href="home.html">
+                        <img src="assets/images/logo.svg" alt="TickTick Logo" class="footer-logo">
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 text-center my-3 my-md-0">
+                    <p class="copyright-text mb-0">© 2025 TickTick | All Rights Reserved</p>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
+                    <div class="social-links">
+                        <a href="#" target="_blank"><img src="assets/images/Instagram.svg" alt="Instagram" class="social-icon"></a>
+                        <a href="#" target="_blank"><img src="assets/images/Facebook.svg" alt="Facebook" class="social-icon"></a>
+                        <a href="#" target="_blank"><img src="assets/images/Twitter.svg" alt="Twitter" class="social-icon"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal fade" id="city-modal" tabindex="-1" aria-labelledby="cityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cityModalLabel">Choose your city</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Astana</li>
+                        <li class="list-group-item">Almaty</li>
+                        <li class="list-group-item">Shymkent</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="offer-modal" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="offerModalLabel">A Very Special Offer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="offer-content">
+                        <p class="offer-text">Special offer content goes here.</p>
+                        <button id="agree-offer-btn" class="btn btn-offer-agree">Agree</button>
+                    </div>
+                    <div id="cat-content" style="display: none;">
+                        <p>Here is your cat!</p>
+                        <img src="assets/images/cat.jpg" alt="A cute cat" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+    
+</body>
+</html>
