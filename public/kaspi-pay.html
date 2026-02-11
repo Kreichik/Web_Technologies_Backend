@@ -151,17 +151,39 @@
         let paymentData = null;
         let amountsHidden = false;
         const BONUS_AMOUNT = 3257;
-        const API_BASE_URL = '';
+        const API_BASE_URL = ''; // Сервер обслуживает оба домена, поэтому путь относительный
 
         function onScanSuccess(decodedText) {
+            let parsedData = null;
+
+            // 1. Попытка разобрать как URL (новый формат)
             try {
-                paymentData = JSON.parse(decodedText);
-                if(paymentData.id && paymentData.amount) {
-                    html5QrcodeScanner.stop().then(() => {
-                        showPaymentScreen(paymentData);
-                    });
+                if (decodedText.includes('paymentId') && decodedText.includes('amount')) {
+                    const url = new URL(decodedText);
+                    const id = url.searchParams.get('paymentId');
+                    const amount = url.searchParams.get('amount');
+                    if (id && amount) {
+                        parsedData = { id: id, amount: parseFloat(amount) };
+                    }
                 }
-            } catch (e) { console.log("Invalid QR"); }
+            } catch (e) { console.log('Not a URL'); }
+
+            // 2. Если не URL, попытка разобрать как JSON (старый формат, на всякий случай)
+            if (!parsedData) {
+                try {
+                    parsedData = JSON.parse(decodedText);
+                } catch (e) { console.log('Not a JSON'); }
+            }
+
+            // Если данные получены успешно
+            if (parsedData && parsedData.id && parsedData.amount) {
+                paymentData = parsedData;
+                html5QrcodeScanner.stop().then(() => {
+                    showPaymentScreen(paymentData);
+                }).catch(err => console.error(err));
+            } else {
+                console.log("Invalid QR Data");
+            }
         }
 
         function showPaymentScreen(data) {
@@ -206,18 +228,24 @@
         $('#btn-pay-action').click(function() {
             if(!paymentData) return;
             $(this).prop('disabled', true).text('Обработка...');
+            // Используем тот же сервер для подтверждения
             $.ajax({
                 url: `${API_BASE_URL}/payments/${paymentData.id}/confirm`,
                 method: 'POST',
                 success: function() {
                     $('#payment-screen').hide();
                     $('#success-screen').css('display', 'flex');
+                },
+                error: function(err) {
+                    alert('Ошибка платежа. Попробуйте снова.');
+                    location.reload();
                 }
             });
         });
 
         $(document).ready(function() {
             html5QrcodeScanner = new Html5Qrcode("reader");
+            // qrbox увеличен для удобства сканирования
             html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
         });
     </script>
