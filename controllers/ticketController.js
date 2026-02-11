@@ -1,8 +1,14 @@
 const Ticket = require('../models/Ticket');
+const Event = require('../models/Event');
 
 exports.getAllTickets = async (req, res) => {
     try {
-        const tickets = await Ticket.find();
+        let tickets;
+        if (req.user.role === 'admin') {
+            tickets = await Ticket.find();
+        } else {
+            tickets = await Ticket.find({ userId: req.user.userId });
+        }
         res.json(tickets);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -16,6 +22,10 @@ exports.getTicketById = async (req, res) => {
         if (!ticket) {
             return res.status(404).json({ error: "Ticket not found" });
         }
+
+        if (req.user.role !== 'admin' && ticket.userId !== req.user.userId) {
+            return res.status(403).json({ error: "Access denied" });
+        }
         
         res.json(ticket);
     } catch (error) {
@@ -25,11 +35,30 @@ exports.getTicketById = async (req, res) => {
 
 exports.createTicket = async (req, res) => {
     try {
-        if (!req.body.price || !req.body.eventId) {
-            return res.status(400).json({ error: "Price and Event ID are required" });
+        const { eventId, seatNumber, price, isVip } = req.body;
+
+        if (!eventId || !seatNumber || !price) {
+            return res.status(400).json({ error: "Event ID, Seat Number and Price are required" });
         }
 
-        const newTicket = await Ticket.create(req.body);
+        const eventExists = await Event.findById(eventId);
+        if (!eventExists) {
+            return res.status(404).json({ error: "Event not found" });
+        }
+
+        const seatTaken = await Ticket.findOne({ eventId, seatNumber });
+        if (seatTaken) {
+            return res.status(400).json({ error: "Seat is already taken" });
+        }
+
+        const newTicket = await Ticket.create({
+            eventId,
+            userId: req.user.userId,
+            seatNumber,
+            price,
+            isVip
+        });
+
         res.status(201).json(newTicket);
     } catch (error) {
         res.status(500).json({ error: error.message });
