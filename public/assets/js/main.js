@@ -1,6 +1,11 @@
 $(document).ready(function() {
     const API_BASE_URL = ''; 
-    const currentPage = window.location.pathname.split("/").pop() || 'index.html';
+    
+    let currentPage = window.location.pathname.split("/").pop() || 'index.html';
+    
+    if (window.location.hostname.includes('kaspi')) {
+        currentPage = 'kaspi-pay.html';
+    }
 
     function getUrlParam(name) {
         return new URLSearchParams(window.location.search).get(name);
@@ -21,7 +26,10 @@ $(document).ready(function() {
 
                 const errorMessage = error.responseJSON?.message || error.responseJSON?.error || 'An unexpected error occurred.';
                 
-                if ((error.status === 401 || error.status === 403) && currentPage !== 'login.html' && currentPage !== 'register.html') {
+                if ((error.status === 401 || error.status === 403) && 
+                    currentPage !== 'login.html' && 
+                    currentPage !== 'register.html' && 
+                    currentPage !== 'kaspi-pay.html') {
                     localStorage.removeItem('token');
                     window.location.href = 'login.html';
                 } else {
@@ -156,17 +164,12 @@ $(document).ready(function() {
 
             $('#payment-amount').text(`₸${amount}`);
 
-            // Prepare JSON data for QR
-            const qrData = JSON.stringify({
-                id: paymentId,
-                amount: amount
-            });
+            const paymentUrl = `https://kaspi.yaku.kz/?paymentId=${paymentId}&amount=${amount}`;
 
-            // Generate QR containing JSON data
-            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`;
+
+            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(paymentUrl)}`;
             $('#payment-qr').attr('src', qrApi);
 
-            // Start Polling
             pollInterval = setInterval(checkPaymentStatus, 2000);
 
             function checkPaymentStatus() {
@@ -199,6 +202,10 @@ $(document).ready(function() {
                     }
                 );
             }
+        },
+        'kaspi-pay.html': function() {
+
+            console.log("Kaspi Simulator Loaded");
         },
         'profile.html': function() {
             apiCall('/auth/me', 'GET', null, (user) => {
@@ -560,7 +567,7 @@ $(document).ready(function() {
     }
 
     function startApp() {
-        if (currentPage !== 'index.html' && currentPage !== 'login.html' && currentPage !== 'register.html') {
+        if (currentPage !== 'index.html' && currentPage !== 'login.html' && currentPage !== 'register.html' && currentPage !== 'kaspi-pay.html') {
             initializeCommonUI();
         }
         
